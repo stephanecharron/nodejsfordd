@@ -3,6 +3,22 @@ var session = require('cookie-session'); // Charge le middleware de sessions
 var bodyParser = require('body-parser'); // Charge le middleware de gestion des paramètres
 var urlencodedParser = bodyParser.urlencoded({ extended: false });
 var os = require("os");
+const tracer = require('dd-trace').init(
+    {runtimeMetrics: true, analytics: true} 
+);
+
+const { createLogger, format, transports } = require('winston');
+
+const loggerW = createLogger({
+  level: 'info',
+  exitOnError: false,
+  format: format.json(),
+  transports: [
+    new transports.Console()
+  ],
+});
+
+
 
 var expressLogging = require('express-logging'),
     logger = require('logops');
@@ -20,7 +36,8 @@ var req = http.get(options, function(response) {
     res_data += chunk;
   });
   response.on('end', function() {
-    logger.info('instance info',{'data':res_data});
+    loggerW.info('instance_info_s',{'starting':true});
+    loggerW.info('instanceinfo',{'data':res_data});
   });
 });
 req.on('error', function(err) {
@@ -31,6 +48,8 @@ req.on('error', function(err) {
     
 
 var app = express();
+
+app.use(require("connect-datadog")({}));
 
 app.use(expressLogging(logger));
 /* On utilise les sessions */
@@ -82,6 +101,7 @@ on en crée une vide sous forme d'array avant la suite */
 .use(function(req, res, next){
     logger.error(new TypeError('Ressource not found'));
     res.redirect('/error');
-})
+});
 
-.listen(8000);   
+
+app.listen(8000);   

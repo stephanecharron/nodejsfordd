@@ -3,10 +3,13 @@
     "version": "0.1.0",
     "dependencies": {
         "body-parser": "~1.10.1",
+        "connect-datadog": "0.0.9",
         "cookie-session": "~1.1.0",
+        "dd-trace": "^0.22.0",
         "ejs": "~2.1.4",
         "express": "~4.11.0",
         "express-logging": "^1.1.1",
+        "express-winston": "^4.0.3",
         "logops": "^2.1.1",
         "winston": "^3.2.1"
     },
