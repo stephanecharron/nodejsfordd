@@ -1,0 +1,10 @@
+init_config:
+instances:
+## Section Logs
+logs:
+                
+        - type: file
+          path: "/home/ubuntu/environment/code_2/logs/out.log"
+          service: nodejs
+          source: nodejs
+          sourcecategory: sourcecode
